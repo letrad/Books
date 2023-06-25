@@ -1,37 +1,26 @@
 [
   {
-    "isbn": "9780062508119",
-    "path": "",
-    "category": "Example Category"
+    "isbn": "9780140449334",
+    "category": "Stoicism"
   },
   {
-    "isbn": "9780517223123",
-    "path": "",
-    "category": "Religion"
+    "isbn": "0140442103",
+    "category": "Stoicism"
   },
   {
-    "isbn": "9781402199035",
-    "path": "",
-    "category": "Religion"
+    "isbn": "9780141917481",
+    "category": "Stoicism"
   },
   {
-    "isbn": "9781402199035",
-    "path": "",
-    "category": "Religion"
+    "isbn": "9780143036326",
+    "category": "Stoicism"
   },
   {
-    "isbn": "9781402199035",
-    "path": "",
-    "category": "Religion"
+      "isbn": "9786058051089",
+      "category": "Poetry"
   },
   {
-    "isbn": "9781402199035",
-    "path": "",
-    "category": "Religion"
-  },
-  {
-    "isbn": "9781402199035",
-    "path": "",
-    "category": "Religion"
+    "isbn": "9781501064951",
+    "category": "Poetry"
   }
 ]

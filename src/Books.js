@@ -23,7 +23,7 @@ const Books = () => {
                                     author: bookData.authors[0].name,
                                     image: `${process.env.PUBLIC_URL}/images/${book.isbn}.jpg`,
                                     category: book.category,
-                                    downloadLink: book.path,
+                                    downloadLink: `${process.env.PUBLIC_URL}/books/${book.isbn}.pdf`,
                                     isbn: book.isbn
                                 };
                             }
