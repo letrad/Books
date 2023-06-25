@@ -5,8 +5,9 @@
 /.pnp
 .pnp.js
 
-# JetBrains
+# project
 .idea
+public/images/
 # testing
 /coverage
 

@@ -1,45 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import './Books.css';
+import booksJson from './books.json';
 
 const Books = () => {
     const [books, setBooks] = useState({});
     const [popup, setPopup] = useState({ show: false, data: {} });
 
-
     useEffect(() => {
         const fetchBooks = async () => {
-            const booksJson = [
-                // Category is defined manually since the ones from OpenLibrary aren't always accurate as I've found out.
-                { isbn: '9780062508119', path: '', category: 'Religion' },
-                { isbn: '9780517223123', path: '', category: 'Religion' },
-                { isbn: '9781402199035', path: '', category: 'Religion' },
-                { isbn: '9781402199035', path: '', category: 'Religion' },
-                { isbn: '9781402199035', path: '', category: 'Religion' },
-                { isbn: '9781402199035', path: '', category: 'Religion' },
-                { isbn: '9781402199035', path: '', category: 'Religion' },
-            ];
-
-            const fetchedBooks = await Promise.all(
-                booksJson.map(async (book) => {
-                    const response = await fetch(
+            const fetchedBooks = await Promise.allSettled(
+                booksJson.map((book) => {
+                    return fetch(
                         `https://openlibrary.org/api/books?bibkeys=ISBN:${book.isbn}&format=json&jscmd=data`
-                    );
-                    const data = await response.json();
-                    const bookData = data[`ISBN:${book.isbn}`];
+                    )
+                        .then(response => response.json())
+                        .then(data => {
+                            const bookData = data[`ISBN:${book.isbn}`];
 
-                    if (bookData) {
-                        return {
-                            title: bookData.title,
-                            author: bookData.authors[0].name,
-                            image: bookData.cover ? bookData.cover.large : '',
-                            category: book.category,
-                            downloadLink: book.path
-                        };
-                    }
+                            if (bookData) {
+                                return {
+                                    title: bookData.title,
+                                    author: bookData.authors[0].name,
+                                    image: `${process.env.PUBLIC_URL}/images/${book.isbn}.jpg`,
+                                    category: book.category,
+                                    downloadLink: book.path,
+                                    isbn: book.isbn
+                                };
+                            }
+                        });
                 })
             );
 
-            const groupedBooks = fetchedBooks.reduce((groups, book) => {
+            const validResults = fetchedBooks
+                .filter(result => result.status === 'fulfilled')
+                .map(result => result.value);
+
+            const groupedBooks = validResults.reduce((groups, book) => {
                 const category = book.category;
                 if (!groups[category]) {
                     groups[category] = [];
@@ -94,6 +90,7 @@ const Books = () => {
                         <img src={popup.data.image} alt={`${popup.data.title} Cover`} />
                         <p>Author: {popup.data.author}</p>
                         <p>Category: {popup.data.category}</p>
+                        <p>ISBN: {popup.data.isbn}</p>
                         <a href={popup.data.downloadLink} download>Download</a>
                     </div>
                 </div>
