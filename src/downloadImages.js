@@ -7,6 +7,14 @@ const booksJson = require('./books.json');
 const fetchAndSaveImages = async () => {
     try {
         const promises = booksJson.map(async (book) => {
+            const imagePath = path.join(__dirname, '..', 'public', 'images', `${book.isbn}.jpg`);
+
+            // If the image already exists, skip fetching and writing
+            if (fs.existsSync(imagePath)) {
+                console.log(`Image for ISBN ${book.isbn} already exists. Skipping.`);
+                return;
+            }
+
             const response = await fetch(
                 `https://openlibrary.org/api/books?bibkeys=ISBN:${book.isbn}&format=json&jscmd=data`
             );
@@ -15,7 +23,6 @@ const fetchAndSaveImages = async () => {
 
             if (bookData && bookData.cover) {
                 const imageUrl = bookData.cover.large;
-                const imagePath = path.join(__dirname, '..', 'public', 'images', `${book.isbn}.jpg`);
 
                 const imageResponse = await fetch(imageUrl);
                 const buffer = await imageResponse.buffer();
